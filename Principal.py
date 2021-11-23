@@ -44,6 +44,7 @@ class Principal:
 
         # define algumas propriedades no botão que exibe o endereço completo:
         self.tela.Bt_TodoEndereco.setCursor(Qt.PointingHandCursor)
+        self.tela.Bt_TodoEndereco.clicked.connect(self.ShowTodoEndereco)
 
         # define algumas propriedades no botão de realizar cadastro:
         self.tela.Bt_Cadastrar.setCursor(Qt.PointingHandCursor)
@@ -77,6 +78,39 @@ class Principal:
             self.tela.Txt_Bairro.setText(endereco['bairro'])
             self.tela.Txt_Cidade.setText(endereco['cidade'])
             self.tela.Txt_UF.setText(endereco['uf'])
+        except exceptions.InvalidCEP:
+            ctypes.windll.user32.MessageBoxW(0, "CEP Inválido!", "Erro!!", 16)
+            self.tela.Txt_CEP.setText("")
+        except exceptions.CEPNotFound:
+            ctypes.windll.user32.MessageBoxW(0, "CEP Inválido!", "Erro!!", 16)
+            self.tela.Txt_CEP.setText("")
+        except exceptions.ConnectionError:
+            ctypes.windll.user32.MessageBoxW(0, "CEP Inválido!", "Erro!!", 16)
+            self.tela.Txt_CEP.setText("")
+        except exceptions.Timeout:
+            ctypes.windll.user32.MessageBoxW(0, "CEP Inválido!", "Erro!!", 16)
+            self.tela.Txt_CEP.setText("")
+        except exceptions.HTTPError:
+            ctypes.windll.user32.MessageBoxW(0, "CEP Inválido!", "Erro!!", 16)
+            self.tela.Txt_CEP.setText("")
+        except exceptions.BaseException:
+            ctypes.windll.user32.MessageBoxW(0, "CEP Inválido!", "Erro!!", 16)
+            self.tela.Txt_CEP.setText("")
+
+    # Função que mostra o endereço completo:
+    def ShowTodoEndereco(self):
+        try:
+            cep = self.tela.Txt_CEP.text()
+            if len(cep) != 9:
+                ctypes.windll.user32.MessageBoxW(0, "CEP incompelto!!!", "Erro!!", 16)
+                self.tela.Txt_CEP.setText("")
+            else:
+                endereco = pycep_correios.get_address_from_cep(cep)
+                Texto = "{}\n{}\n{}\n{}\n".format(endereco['logradouro'],
+                                                  endereco['bairro'],
+                                                  endereco['cidade'],
+                                                  endereco['uf'])
+                ctypes.windll.user32.MessageBoxW(0, Texto, "Todo o Endereço!", 1)
         except exceptions.InvalidCEP:
             ctypes.windll.user32.MessageBoxW(0, "CEP Inválido!", "Erro!!", 16)
             self.tela.Txt_CEP.setText("")

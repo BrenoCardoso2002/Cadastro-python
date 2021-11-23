@@ -189,7 +189,10 @@ class Principal:
             if len(CPF.replace(" ", "")) != 14:
                 ctypes.windll.user32.MessageBoxW(0, "CPF inválido", "Erro!!", 16)
             else:
-                ctypes.windll.user32.MessageBoxW(0, "CPF válido", "Sucesso!!", 1)
+                if len(CEP.replace(" ", "") != 9):
+                    ctypes.windll.user32.MessageBoxW(0, "CEP inválido", "Erro!!", 16)
+                else:
+                    ctypes.windll.user32.MessageBoxW(0, "CEP válido", "Sucesso!!", 1)
 
 
 # Condicional que verifica se há a conexão:

@@ -18,6 +18,35 @@ def check_internet():
         return False
 
 
+# Função validar Codigo
+def ValidarCodigoCPF(Codigo):
+    Codigo = Codigo.replace(".", "")
+    Codigo = Codigo.replace("-", "")
+    if Codigo[0] == Codigo[1] == Codigo[2] == Codigo[3] == Codigo[4] == Codigo[5] == Codigo[6] == Codigo[7] == Codigo[8] == Codigo[9] == Codigo[10]:
+        return False
+    else:
+        # calcula o primeiro digito:
+        i = 10
+        soma1 = 0
+        for j in range(9):
+            soma1 += (int(Codigo[j]) * i)
+            i -= 1
+        d1 = (soma1 * 10) % 11
+        if d1 != int(Codigo[9]):
+            return False
+        else:
+            m = 11
+            soma2 = 0
+            for n in range(10):
+                soma2 += (int(Codigo[n]) * m)
+                m -= 1
+            d2 = (soma2 * 10) % 11
+            if d2 != int(Codigo[10]):
+                return False
+            else:
+                return True
+
+
 # classe principal:
 class Principal:
     def __init__(self):
@@ -31,6 +60,7 @@ class Principal:
 
         # define algumas propriedades na caixa de texto do CPF:
         self.tela.Txt_CPF.setInputMask("999.999.999-99")
+        self.tela.Txt_CPF.textChanged.connect(self.CPFChanged)
 
         # define algumas propriedades na caixa de texto do CEP:
         self.tela.Txt_CEP.setInputMask("99999-999")
@@ -129,6 +159,14 @@ class Principal:
         except exceptions.BaseException:
             ctypes.windll.user32.MessageBoxW(0, "CEP Inválido!", "Erro!!", 16)
             self.tela.Txt_CEP.setText("")
+
+    # Função de mudança de texto no campo CPF:
+    def CPFChanged(self):
+        cpf = self.tela.Txt_CPF.text()
+        if len(cpf) == 14:
+            if not ValidarCodigoCPF(cpf):
+                ctypes.windll.user32.MessageBoxW(0, "CPF Inválido!", "Erro!!", 16)
+                self.tela.Txt_CPF.setText("")
 
 
 # Condicional que verifica se há a conexão:

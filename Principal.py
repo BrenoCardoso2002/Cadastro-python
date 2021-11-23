@@ -186,7 +186,10 @@ class Principal:
         if Usuario.replace(" ", "") == "" or CPF.replace(" ", "") == "" or Email.replace(" ", "") == "" or CEP.replace(" ", "") == "" or Numero.replace(" ", "") == "" or Complemento.replace(" ", "") == "" or Celular.replace(" ", "") == "" or Fixo.replace(" ", "") == "":
             ctypes.windll.user32.MessageBoxW(0, "Há algum campo em branco", "Erro!!", 16)
         else:
-            ctypes.windll.user32.MessageBoxW(0, "Não há campo em branco", "Sucesso!!", 1)
+            if len(CPF.replace(" ", "")) != 14:
+                ctypes.windll.user32.MessageBoxW(0, "CPF inválido", "Erro!!", 16)
+            else:
+                ctypes.windll.user32.MessageBoxW(0, "CPF válido", "Sucesso!!", 1)
 
 
 # Condicional que verifica se há a conexão:

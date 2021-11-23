@@ -1,4 +1,5 @@
 # Importações:
+from datetime import datetime
 from PyQt5.QtCore import Qt
 import ctypes
 import requests
@@ -45,6 +46,17 @@ def ValidarCodigoCPF(Codigo):
                 return False
             else:
                 return True
+
+
+# Função que válida a data de nascimento:
+def ValidarData(Data):
+    AnoNasc = Data[-4::]
+    AnoAtual = datetime.today().strftime('%Y')
+    Diferenca = int(AnoAtual) - int(AnoNasc)
+    if Diferenca > 0:
+        return True
+    else:
+        return False
 
 
 # classe principal:
@@ -195,7 +207,10 @@ class Principal:
                     if len(Celular.replace(" ", "")) != 14 or len(Fixo.replace(" ", "")) != 13:
                         ctypes.windll.user32.MessageBoxW(0, "Telefones inválido", "Erro!!", 16)
                     else:
-                        ctypes.windll.user32.MessageBoxW(0, "Telefones válido", "Sucesso!!", 1)
+                        if not ValidarData(Nascimento):
+                            ctypes.windll.user32.MessageBoxW(0, "Data inválida", "Erro!!", 16)
+                        else:
+                            ctypes.windll.user32.MessageBoxW(0, "Data válido", "Sucesso!!", 1)
 
 
 # Condicional que verifica se há a conexão:

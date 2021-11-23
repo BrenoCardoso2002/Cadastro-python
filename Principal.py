@@ -1,5 +1,6 @@
 # Importações:
 from datetime import datetime
+from validate_email import validate_email
 from PyQt5.QtCore import Qt
 import ctypes
 import requests
@@ -210,7 +211,10 @@ class Principal:
                         if not ValidarData(Nascimento):
                             ctypes.windll.user32.MessageBoxW(0, "Data inválida", "Erro!!", 16)
                         else:
-                            ctypes.windll.user32.MessageBoxW(0, "Data válido", "Sucesso!!", 1)
+                            if not validate_email(Email.replace(" ", "")):
+                                ctypes.windll.user32.MessageBoxW(0, "Email inválido", "Erro!!", 16)
+                            else:
+                                ctypes.windll.user32.MessageBoxW(0, "E-mail válido", "Sucesso!!", 1)
 
 
 # Condicional que verifica se há a conexão:

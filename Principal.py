@@ -192,7 +192,10 @@ class Principal:
                 if len(CEP.replace(" ", "") != 9):
                     ctypes.windll.user32.MessageBoxW(0, "CEP inválido", "Erro!!", 16)
                 else:
-                    ctypes.windll.user32.MessageBoxW(0, "CEP válido", "Sucesso!!", 1)
+                    if len(Celular.replace(" ", "")) != 14 or len(Fixo.replace(" ", "")) != 13:
+                        ctypes.windll.user32.MessageBoxW(0, "Telefones inválido", "Erro!!", 16)
+                    else:
+                        ctypes.windll.user32.MessageBoxW(0, "Telefones válido", "Sucesso!!", 1)
 
 
 # Condicional que verifica se há a conexão:

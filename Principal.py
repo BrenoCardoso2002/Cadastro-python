@@ -78,6 +78,7 @@ class Principal:
 
         # define algumas propriedades no botão de realizar cadastro:
         self.tela.Bt_Cadastrar.setCursor(Qt.PointingHandCursor)
+        self.tela.Bt_Cadastrar.clicked.connect(self.CadastrarUsuario)
 
         # desabilita os campos que mostram o endereço do usuário:
         self.tela.Txt_Logradouro.setEnabled(False)
@@ -167,6 +168,25 @@ class Principal:
             if not ValidarCodigoCPF(cpf):
                 ctypes.windll.user32.MessageBoxW(0, "CPF Inválido!", "Erro!!", 16)
                 self.tela.Txt_CPF.setText("")
+
+    # Função de clique do botão cadastrar:
+    def CadastrarUsuario(self):
+        # Obtem uma variável para cada campo:txt_Nome
+        Usuario = self.tela.Txt_Nome.text().lower()
+        CPF = self.tela.Txt_CPF.text()
+        Email = self.tela.Txt_Email.text().lower()
+        Nascimento = self.tela.Dt_Nascimento.text()
+        CEP = self.tela.Txt_CEP.text()
+        Numero = self.tela.Txt_Numero.text()
+        Complemento = self.tela.Txt_Complemento.text().lower()
+        Celular = self.tela.Txt_Celular.text()
+        Fixo = self.tela.Txt_Fixo.text()
+
+        # verifica se há algum campo em branco:
+        if Usuario.replace(" ", "") == "" or CPF.replace(" ", "") == "" or Email.replace(" ", "") == "" or CEP.replace(" ", "") == "" or Numero.replace(" ", "") == "" or Complemento.replace(" ", "") == "" or Celular.replace(" ", "") == "" or Fixo.replace(" ", "") == "":
+            ctypes.windll.user32.MessageBoxW(0, "Há algum campo em branco", "Erro!!", 16)
+        else:
+            ctypes.windll.user32.MessageBoxW(0, "Não há campo em branco", "Sucesso!!", 1)
 
 
 # Condicional que verifica se há a conexão:

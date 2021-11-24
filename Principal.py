@@ -1,4 +1,7 @@
 # Importações:
+import os
+import sqlite3
+import sys
 from datetime import datetime
 from validate_email import validate_email
 from PyQt5.QtCore import Qt
@@ -66,6 +69,19 @@ class Principal:
         # Variaveis para incialição e manipulação da tela e de seus componentes:
         app = QtWidgets.QApplication([])
         self.tela = uic.loadUi("interface.ui")
+
+        # Banco de dados:
+        File = 'DataBase.db'
+        Exist = os.path.isfile(File)
+        # variaveis do banco:
+        self.conn = ''
+        self.cur = ''
+        if not Exist:
+            ctypes.windll.user32.MessageBoxW(0, "Banco de dados não encontrado!", "Erro!!", 16)
+            sys.exit(1)
+        else:
+            self.conn = sqlite3.connect(File)
+            self.cur = self.conn.cursor()
 
         # define algumas propriedades da self.tela
         self.tela.setFixedSize(720, 295)
@@ -215,6 +231,10 @@ class Principal:
                                 ctypes.windll.user32.MessageBoxW(0, "Email inválido", "Erro!!", 16)
                             else:
                                 ctypes.windll.user32.MessageBoxW(0, "E-mail válido", "Sucesso!!", 1)
+
+    # Função fecha Janela
+    def closeEvent(self, event):
+        self.conn.close()
 
 
 # Condicional que verifica se há a conexão:

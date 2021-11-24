@@ -212,7 +212,7 @@ class Principal:
         Fixo = self.tela.Txt_Fixo.text()
 
         # verifica se há algum campo em branco:
-        if Usuario.replace(" ", "") == "" or CPF.replace(" ", "") == "" or Email.replace(" ", "") == "" or CEP.replace(" ", "") == "" or Numero.replace(" ", "") == "" or Complemento.replace(" ", "") == "" or Celular.replace(" ", "") == "" or Fixo.replace(" ", "") == "":
+        if Usuario.replace(" ", "") == "" or CPF.replace(" ", "") == "" or Email.replace(" ", "") == "" or CEP.replace(" ", "") == "" or Numero.replace(" ", "") == "" or Complemento.replace(" ", "") == "" or Celular.replace(" ","") == "" or Fixo.replace(" ", "") == "":
             ctypes.windll.user32.MessageBoxW(0, "Há algum campo em branco", "Erro!!", 16)
         else:
             if len(CPF.replace(" ", "")) != 14:
@@ -230,7 +230,35 @@ class Principal:
                             if not validate_email(Email.replace(" ", "")):
                                 ctypes.windll.user32.MessageBoxW(0, "Email inválido", "Erro!!", 16)
                             else:
-                                ctypes.windll.user32.MessageBoxW(0, "E-mail válido", "Sucesso!!", 1)
+                                if not self.VerificaEmailDB(Email):
+                                    ctypes.windll.user32.MessageBoxW(0, "E-mail já cadastrado", "Erro!!", 16)
+                                else:
+                                    if not self.VerificaCPFDB(CPF):
+                                        ctypes.windll.user32.MessageBoxW(0, "CPF já cadastrado", "Erro!!", 16)
+                                    else:
+                                        ctypes.windll.user32.MessageBoxW(0, "Adicionando dados", "Erro!!", 16)
+
+    # Função que verifica se o e-mail já foi cadastrado:
+    def VerificaEmailDB(self, Email):
+        Status = True
+        for row in self.cur.execute('SELECT Email from tb_users'):
+            if Email == row[0]:
+                Status = False
+        if not Status:
+            print("E-mail já cadastrado")
+        else:
+            print("E-mail não cadastrado")
+
+    # Função que verifica se o cpf já foi cadastrado:
+    def VerificaCPFDB(self, CPF):
+        Status = True
+        for row in self.cur.execute('SELECT CPF from tb_users'):
+            if CPF == row[0]:
+                Status = False
+        if not Status:
+            print("CPF já cadastrado")
+        else:
+            print("CPF não cadastrado")
 
     # Função fecha Janela
     def closeEvent(self, event):

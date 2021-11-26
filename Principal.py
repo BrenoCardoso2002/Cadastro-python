@@ -10,6 +10,7 @@ import requests
 from PyQt5 import QtWidgets, uic, QtGui
 import pycep_correios
 from pycep_correios import exceptions
+from win32con import IDYES
 
 
 # Função que verifica se há conexão com a internet:
@@ -58,6 +59,27 @@ def ValidarData(Data):
     AnoAtual = datetime.today().strftime('%Y')
     Diferenca = int(AnoAtual) - int(AnoNasc)
     if Diferenca > 0:
+        return True
+    else:
+        return False
+
+
+# Função para a confirmação dos dados:
+def ConfirmarDados(Nome, Email, CPF, Nascimento, CEP, Logradouro, Numero, Complemento, Cidade, Uf, Celular, Fixo):
+    Texto = "Nome = {}\n".format(Nome)
+    Texto += "E-mail = {}\n".format(Email)
+    Texto += "CPF = {}\n".format(CPF)
+    Texto += "Nascimento = {}\n".format(Nascimento)
+    Texto += "CEP = {}\n".format(CEP)
+    Texto += "Logradouro = {}\n".format(Logradouro)
+    Texto += "Numero = {}\n".format(Numero)
+    Texto += "Complement = {}\n".format(Complemento)
+    Texto += "Cidade = {}\n".format(Cidade)
+    Texto += "UF = {}\n".format(Uf)
+    Texto += "Celular = {}\n".format(Celular)
+    Texto += "Fixo = {}\n".format(Fixo)
+    resp = ctypes.windll.user32.MessageBoxW(0, Texto, "Erro!!", 4)
+    if resp == IDYES:
         return True
     else:
         return False
@@ -200,7 +222,7 @@ class Principal:
 
     # Função de clique do botão cadastrar:
     def CadastrarUsuario(self):
-        # Obtem uma variável para cada campo:txt_Nome
+        # Obtem uma variável para cada campo:
         Usuario = self.tela.Txt_Nome.text().lower()
         CPF = self.tela.Txt_CPF.text()
         Email = self.tela.Txt_Email.text().lower()
@@ -212,7 +234,7 @@ class Principal:
         Fixo = self.tela.Txt_Fixo.text()
 
         # verifica se há algum campo em branco:
-        if Usuario.replace(" ", "") == "" or CPF.replace(" ", "") == "" or Email.replace(" ", "") == "" or CEP.replace(" ", "") == "" or Numero.replace(" ", "") == "" or Complemento.replace(" ", "") == "" or Celular.replace(" ","") == "" or Fixo.replace(" ", "") == "":
+        if Usuario.replace(" ", "") == "" or CPF.replace(" ", "") == "" or Email.replace(" ", "") == "" or CEP.replace(" ", "") == "" or Numero.replace(" ", "") == "" or Complemento.replace(" ", "") == "" or Celular.replace(" ", "") == "" or Fixo.replace(" ", "") == "":
             ctypes.windll.user32.MessageBoxW(0, "Há algum campo em branco", "Erro!!", 16)
         else:
             if len(CPF.replace(" ", "")) != 14:
@@ -236,7 +258,8 @@ class Principal:
                                     if not self.VerificaCPFDB(CPF):
                                         ctypes.windll.user32.MessageBoxW(0, "CPF já cadastrado", "Erro!!", 16)
                                     else:
-                                        ctypes.windll.user32.MessageBoxW(0, "Adicionando dados", "Erro!!", 16)
+                                        if ConfirmarDados(Usuario, Email, CPF, Nascimento, CEP, self.tela.Txt_Logradouro.text().lower(), Numero, Complemento, self.tela.Txt_Cidade.text().lower(), self.tela.Txt_UF.text(), Celular, Fixo):
+                                            ctypes.windll.user32.MessageBoxW(0, "Todos os dados estão corretos!\nAdicionando os dados", "Erro!!", 16)
 
     # Função que verifica se o e-mail já foi cadastrado:
     def VerificaEmailDB(self, Email):
@@ -261,7 +284,7 @@ class Principal:
             print("CPF não cadastrado")
 
     # Função fecha Janela
-    def closeEvent(self, event):
+    def closeEvent(self):
         self.conn.close()
 
 

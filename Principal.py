@@ -78,7 +78,7 @@ def ConfirmarDados(Nome, Email, CPF, Nascimento, CEP, Logradouro, Numero, Comple
     Texto += "UF = {}\n".format(Uf)
     Texto += "Celular = {}\n".format(Celular)
     Texto += "Fixo = {}\n".format(Fixo)
-    resp = ctypes.windll.user32.MessageBoxW(0, Texto, "Erro!!", 4)
+    resp = ctypes.windll.user32.MessageBoxW(0, Texto, "Confirmar dados!!", 4)
     if resp == IDYES:
         return True
     else:
@@ -268,9 +268,9 @@ class Principal:
             if Email == row[0]:
                 Status = False
         if not Status:
-            print("E-mail já cadastrado")
+            return False
         else:
-            print("E-mail não cadastrado")
+            return True
 
     # Função que verifica se o cpf já foi cadastrado:
     def VerificaCPFDB(self, CPF):
@@ -279,9 +279,9 @@ class Principal:
             if CPF == row[0]:
                 Status = False
         if not Status:
-            print("CPF já cadastrado")
+            return False
         else:
-            print("CPF não cadastrado")
+            return True
 
     # Função fecha Janela
     def closeEvent(self):

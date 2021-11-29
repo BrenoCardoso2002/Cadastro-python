@@ -234,7 +234,7 @@ class Principal:
         Fixo = self.tela.Txt_Fixo.text()
 
         # verifica se há algum campo em branco:
-        if Usuario.replace(" ", "") == "" or CPF.replace(" ", "") == "" or Email.replace(" ", "") == "" or CEP.replace(" ", "") == "" or Numero.replace(" ", "") == "" or Complemento.replace(" ", "") == "" or Celular.replace(" ", "") == "" or Fixo.replace(" ", "") == "":
+        if Usuario.replace(" ", "") == "" or CPF.replace(" ", "") == "" or Email.replace(" ", "") == "" or CEP.replace(" ", "") == "" or Numero.replace(" ", "") == "" or Celular.replace(" ", "") == "" or Fixo.replace(" ", "") == "":
             ctypes.windll.user32.MessageBoxW(0, "Há algum campo em branco", "Erro!!", 16)
         else:
             if len(CPF.replace(" ", "")) != 14:
@@ -259,7 +259,11 @@ class Principal:
                                         ctypes.windll.user32.MessageBoxW(0, "CPF já cadastrado", "Erro!!", 16)
                                     else:
                                         if ConfirmarDados(Usuario, Email, CPF, Nascimento, CEP, self.tela.Txt_Logradouro.text().lower(), Numero, Complemento, self.tela.Txt_Cidade.text().lower(), self.tela.Txt_UF.text(), Celular, Fixo):
-                                            ctypes.windll.user32.MessageBoxW(0, "Todos os dados estão corretos!\nAdicionando os dados", "Erro!!", 16)
+                                            sqlComand = "Insert into tb_users (Nome, Email, CPF, Nascimento, CEP, Numero, Complemento, Celular, Fixo) Values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')".format(
+                                                Usuario, Email, CPF, Nascimento, CEP, Numero, Complemento, Celular,
+                                                Fixo)
+                                            self.cur.execute(sqlComand)
+                                            self.conn.commit()
 
     # Função que verifica se o e-mail já foi cadastrado:
     def VerificaEmailDB(self, Email):
